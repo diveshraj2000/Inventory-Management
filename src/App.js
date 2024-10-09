@@ -1,25 +1,44 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import TopWidgets from './components/TopWidgets';
+import InventoryTable from './components/InventoryTable';
+import { InventoryProvider } from './InventoryContext';
+import { Switch, FormControlLabel, Typography } from '@mui/material'; 
 
-function App() {
+const App = () => {
+  const [role, setRole] = useState('admin'); 
+
+  const toggleRole = (event) => {
+    setRole(event.target.checked ? 'admin' : 'user');
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <InventoryProvider>
+      <div className="App">
+        <div className="flex  justify-between my-5">
+          <span className="text-3xl font-bold">Inventory Stats</span>
+
+          <FormControlLabel
+            control={
+              <Switch
+                checked={role === 'admin'}
+                onChange={toggleRole}
+                color="primary"
+              />
+            }
+            label={
+              <Typography variant="h6">
+                {role === 'admin' ? 'Admin' : 'User'}
+              </Typography>
+            }
+          />
+        </div>
+
+        <TopWidgets />
+        <InventoryTable role={role} />
+      </div>
+    </InventoryProvider>
   );
-}
+};
 
 export default App;
